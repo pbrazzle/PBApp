@@ -1,7 +1,6 @@
 #include "Window.h"
-#include "PBApp.h"
 
-#include <winuser.h>
+#include <stdexcept>
 
 const char CLASS_NAME[] = "PB Window";
 
@@ -9,6 +8,21 @@ Window::Window(HWND h) : handle(h) { }
 
 void Window::show() const {
     ShowWindow(handle, SW_SHOW);
+}
+
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    Window* window = reinterpret_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+
+    switch (uMsg) {
+        case WM_PAINT:
+            window->onPaint();
+            return 0;
+        case WM_DESTROY:
+            PostQuitMessage(0);
+            return 0;
+    }
+
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
 void registerWindowClass() {
