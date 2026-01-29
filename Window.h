@@ -1,6 +1,7 @@
 #pragma once
 
 #include <windows.h>
+#include <memory>
 
 class Window {
 public:
@@ -8,8 +9,15 @@ public:
 
     void show() const;
 
-private:
+    virtual void onPaint() {}
+
+protected:
     HWND handle;
 };
 
-Window createWindow();
+HWND createWindowHandle();
+
+template <typename WindowType>
+std::unique_ptr<Window> createWindow() {
+    return std::make_unique<WindowType>(createWindowHandle());
+}

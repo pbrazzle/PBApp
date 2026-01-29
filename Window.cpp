@@ -1,9 +1,13 @@
 #include "Window.h"
 #include "PBWindow.h"
 
+#include <winuser.h>
+
 const char CLASS_NAME[] = "PB Window";
 
-Window::Window(HWND h) : handle(h) { }
+Window::Window(HWND h) : handle(h) { 
+    SetWindowLongPtr(handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
+}
 
 void Window::show() const {
     ShowWindow(handle, SW_SHOW);
@@ -48,8 +52,4 @@ HWND createWindowHandle() {
     }
 
     return handle;
-}
-
-Window createWindow() {
-    return Window(createWindowHandle());
 }
