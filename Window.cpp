@@ -5,9 +5,7 @@
 
 const char CLASS_NAME[] = "PB Window";
 
-Window::Window(HWND h) : handle(h) { 
-    SetWindowLongPtr(handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
-}
+Window::Window(HWND h) : handle(h) { }
 
 void Window::show() const {
     ShowWindow(handle, SW_SHOW);
