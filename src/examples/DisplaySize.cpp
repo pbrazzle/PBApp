@@ -5,9 +5,8 @@
 *       - The button should spawn a new window. App closes when all windows are closed.
 */
 
-#include "PBApp.h"
-
-#include "Window.h"
+#include "PBApp/PBApp.h"
+#include "PBApp/Window.h"
 
 #include <string>
 #include <wingdi.h>
