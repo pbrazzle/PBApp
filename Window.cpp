@@ -8,6 +8,7 @@ Window::Window(HWND h) : handle(h) { }
 
 void Window::show() const {
     ShowWindow(handle, SW_SHOW);
+    UpdateWindow(handle);
 }
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
