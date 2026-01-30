@@ -15,7 +15,9 @@ public:
 
     void show() const;
 
-    virtual void onPaint() {}
+    virtual void onPaint() {};
+
+    virtual void onResize(unsigned int width, unsigned int height) {};
 
 protected:
     HWND handle;

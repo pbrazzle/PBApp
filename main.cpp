@@ -9,31 +9,53 @@
 
 #include "Window.h"
 
+#include <string>
+#include <wingdi.h>
+#include <iostream>
+
 class MyWindow : public Window {
 public:
-    MyWindow(HWND handle) : Window(handle) { }
+    MyWindow(HWND handle) : Window(handle), screenBuffer(nullptr), screenBufferBitmap(nullptr) {
+        screenBuffer = CreateCompatibleDC(GetDC(handle));
+        screenBufferBitmap = CreateCompatibleBitmap(screenBuffer, 1, 1);
+        SelectObject(screenBuffer, screenBufferBitmap);
+        std::cout << "DC is " << screenBuffer <<'\n';
+    }
+
+    ~MyWindow() {
+        // DeleteDC(screenBuffer);
+        // DeleteObject(screenBufferBitmap);
+    }
 
     void onPaint() override {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(handle, &ps);
 
-        FillRect(hdc, &ps.rcPaint, (HBRUSH) (COLOR_WINDOW+1));
-        TextOut(hdc, 0, 0, "I'm painting!", 15);
+        RECT windowSize;
+        GetClientRect(handle, &windowSize);
 
-        // Making a solid red brush
-        auto redBrush = CreateSolidBrush(RGB(255, 0, 0));
-        SelectObject(hdc, redBrush);
+        FillRect(screenBuffer, &windowSize, reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH)));
 
-        Rectangle(hdc, 20, 20, 50, 50);
-        Ellipse(hdc, 50, 20, 80, 50);
+        auto sizeText = std::string("Width: " + std::to_string(windowSize.right) + " Height: " + std::to_string(windowSize.bottom));
+        TextOut(screenBuffer, 0, 0, sizeText.c_str(), sizeText.size());
 
-        POINT triangle[3] = {{80,50}, {95,20}, {110,50}};
-        Polygon(hdc, triangle, 3);
-
-        DeleteObject(redBrush);
+        BitBlt(hdc, 0, 0, windowSize.right, windowSize.bottom, screenBuffer, 0, 0, SRCCOPY);
 
         EndPaint(handle, &ps);
     }
+
+    void onResize(unsigned int width, unsigned int height) override {
+        screenBufferBitmap = CreateCompatibleBitmap(screenBuffer, width, height);
+        auto oldBitmap = SelectObject(screenBuffer, screenBufferBitmap);
+        DeleteObject(oldBitmap);
+
+        RECT newSize = { 0, 0, static_cast<LONG>(width), static_cast<LONG>(height) };
+        InvalidateRect(handle, &newSize, FALSE);
+    }
+
+private:
+    HDC screenBuffer;
+    HBITMAP screenBufferBitmap;
 };
 
 class ExampleApp : public PBApp {

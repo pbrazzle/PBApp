@@ -1,6 +1,7 @@
 #include "Window.h"
 
 #include <stdexcept>
+#include <winuser.h>
 
 const char CLASS_NAME[] = "PB Window";
 
@@ -14,10 +15,19 @@ void Window::show() const {
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     Window* window = reinterpret_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
+    if (!window) return DefWindowProc(hwnd, uMsg, wParam, lParam);
+
     switch (uMsg) {
         case WM_PAINT:
             window->onPaint();
             return 0;
+        case WM_SIZE:
+        {   
+            UINT width = LOWORD(lParam);
+            UINT height = HIWORD(lParam);
+            window->onResize(width, height);
+        }
+        return 0;
         case WM_DESTROY:
             PostQuitMessage(0);
             return 0;
