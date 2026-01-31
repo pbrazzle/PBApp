@@ -4,12 +4,9 @@
 
 #include "PBApp/PBApp.h"
 #include "PBApp/Window.h"
-#include "PBApp/PBAssert.h"
 
 #include <string>
 #include <wingdi.h>
-#include <iostream>
-#include <cassert>
 
 class MyWindow : public Window {
 public:
@@ -17,12 +14,7 @@ public:
 
 protected:
     void onPaint() override {
-        RECT windowSize;
-        GetClientRect(handle, &windowSize);
-
-        FillRect(screenBuffer, &windowSize, reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH)));
-
-        auto sizeText = std::string("Width: " + std::to_string(windowSize.right) + " Height: " + std::to_string(windowSize.bottom));
+        auto sizeText = std::string("Width: " + std::to_string(getWidth()) + " Height: " + std::to_string(getHeight()));
         TextOut(screenBuffer, 0, 0, sizeText.c_str(), sizeText.size());
     }
 };

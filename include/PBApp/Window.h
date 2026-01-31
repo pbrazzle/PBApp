@@ -19,14 +19,19 @@ public:
 
     void resize(unsigned int width, unsigned int height);
 
+    unsigned int getWidth() const;
+
+    unsigned int getHeight() const;
 
 protected:
     HWND handle;
     HDC screenBuffer;
     HBITMAP screenBufferBitmap;
+
+    unsigned int width, height;
     
     virtual void onPaint() {};
-    
+
     virtual void onResize(unsigned int width, unsigned int height) {};
 };
 

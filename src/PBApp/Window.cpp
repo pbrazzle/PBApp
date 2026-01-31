@@ -11,6 +11,11 @@ Window::Window(HWND h) : handle(h) {
     screenBuffer = CreateCompatibleDC(GetDC(handle));
     screenBufferBitmap = CreateCompatibleBitmap(screenBuffer, 1, 1);
     SelectObject(screenBuffer, screenBufferBitmap);
+
+    RECT size;
+    GetClientRect(handle, &size);
+    width = size.right;
+    height = size.bottom;
 }
 
 void Window::show() const {
@@ -22,11 +27,12 @@ void Window::paint() {
     PAINTSTRUCT ps;
     HDC hdc = BeginPaint(handle, &ps);
 
+    RECT windowSize = { 0, 0, static_cast<LONG>(width), static_cast<LONG>(height) };
+    FillRect(screenBuffer, &windowSize, reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1));
+
     onPaint();        
     
-    RECT windowSize;
-    GetClientRect(handle, &windowSize);
-    BitBlt(hdc, 0, 0, windowSize.right, windowSize.bottom, screenBuffer, 0, 0, SRCCOPY);
+    BitBlt(hdc, 0, 0, width, height, screenBuffer, 0, 0, SRCCOPY);
     EndPaint(handle, &ps);
 }
 
@@ -40,12 +46,18 @@ void Window::resize(unsigned int width, unsigned int height) {
     auto result = DeleteObject(oldBitmap);
     PBAPP_ASSERT(result, "Could not delete old bitmap");
 
+    this->width = width;
+    this->height = height;
     RECT newSize = { 0, 0, static_cast<LONG>(width), static_cast<LONG>(height) };
     result = InvalidateRect(handle, &newSize, FALSE);
     PBAPP_ASSERT(result, "Could not schedule repaint");
 
     onResize(width, height);
 }
+
+unsigned int Window::getWidth() const { return width; }
+
+unsigned int Window::getHeight() const { return height; }
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     Window* window = reinterpret_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
