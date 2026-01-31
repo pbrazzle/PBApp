@@ -7,6 +7,7 @@
 
 #include "PBApp/PBApp.h"
 #include "PBApp/Window.h"
+#include "PBApp/PBAssert.h"
 
 #include <string>
 #include <wingdi.h>
@@ -68,6 +69,7 @@ private:
 class ExampleApp : public PBApp {
 public:
     ExampleApp() {
+        PBAPP_ASSERT(false, "Just goofin around");
         myWindow = createWindow<MyWindow>();
         myWindow->show();
     }
