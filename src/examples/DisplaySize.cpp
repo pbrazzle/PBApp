@@ -1,8 +1,5 @@
 /**
-*   TODO:
-*   - Display current window size as text
-*   - Add a button to the window
-*       - The button should spawn a new window. App closes when all windows are closed.
+*   Displays the current size of the window as text on the screen
 */
 
 #include "PBApp/PBApp.h"
