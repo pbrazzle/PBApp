@@ -2,8 +2,8 @@
 
 #include "PBApp/PBAssert.h"
 
-#include <stdexcept>
 #include <winuser.h>
+#include <set>
 
 const char CLASS_NAME[] = "PB Window";
 
@@ -59,6 +59,8 @@ unsigned int Window::getWidth() const { return width; }
 
 unsigned int Window::getHeight() const { return height; }
 
+void destroyWindow(Window* window);
+
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     Window* window = reinterpret_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
@@ -76,7 +78,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
         }
         return 0;
         case WM_DESTROY:
-            PostQuitMessage(0);
+            destroyWindow(window);
             return 0;
     }
 
@@ -116,10 +118,22 @@ HWND createWindowHandle() {
         NULL                    // Additional application data
     );
 
-    if (handle == NULL)
-    {
-        throw std::runtime_error("Failed to create window!");
-    }
+    PBAPP_ASSERT(handle, "Failed to create window");
 
     return handle;
+}
+
+namespace {
+    std::set<Window*> activeWindows;
+}
+
+void registerWindow(Window* window, HWND handle) {
+    activeWindows.insert(window);
+    SetWindowLongPtr(handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(window));
+}
+
+void destroyWindow(Window* window) {
+    delete window;
+    activeWindows.erase(window);
+    if (activeWindows.empty()) PostQuitMessage(0);
 }

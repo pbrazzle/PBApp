@@ -2,8 +2,6 @@
 
 #include <windows.h>
 
-#include <memory>
-
 class Window {
 public:
     Window(HWND h);
@@ -37,12 +35,13 @@ protected:
 
 HWND createWindowHandle();
 
-template <typename WindowType>
-std::unique_ptr<Window> createWindow() {
-    auto handle = createWindowHandle();
+void registerWindow(Window*, HWND);
 
-    std::unique_ptr<Window> window = std::make_unique<WindowType>(handle);
-    SetWindowLongPtr(handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(window.get()));
+template <typename WindowType>
+Window* createWindow() {
+    auto handle = createWindowHandle();
+    Window* window = new WindowType(handle);
+    registerWindow(window, handle);
 
     return window;
 }

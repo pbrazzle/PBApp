@@ -22,12 +22,9 @@ protected:
 class ExampleApp : public PBApp {
 public:
     ExampleApp() {
-        myWindow = createWindow<MyWindow>();
+        auto myWindow = createWindow<MyWindow>();
         myWindow->show();
     }
-
-private:
-    std::unique_ptr<Window> myWindow;
 };
 
 PBApp* createApp() {
