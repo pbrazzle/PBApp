@@ -33,15 +33,7 @@ protected:
     virtual void onResize(unsigned int width, unsigned int height) {};
 };
 
-HWND createWindowHandle();
-
-void registerWindow(Window*, HWND);
-
 template <typename WindowType>
-Window* createWindow() {
-    auto handle = createWindowHandle();
-    Window* window = new WindowType(handle);
-    registerWindow(window, handle);
+Window* createWindow();
 
-    return window;
-}
+#include "PBApp/Window.tpp"
