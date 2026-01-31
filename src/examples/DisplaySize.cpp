@@ -11,6 +11,7 @@
 #include <string>
 #include <wingdi.h>
 #include <iostream>
+#include <cassert>
 
 class MyWindow : public Window {
 public:
@@ -44,12 +45,19 @@ public:
     }
 
     void onResize(unsigned int width, unsigned int height) override {
+        std::cout << "Resized to " << width << ", " << height << '\n';
         screenBufferBitmap = CreateCompatibleBitmap(screenBuffer, width, height);
+        assert(screenBufferBitmap);
+
         auto oldBitmap = SelectObject(screenBuffer, screenBufferBitmap);
-        DeleteObject(oldBitmap);
+        assert(oldBitmap);
+
+        auto result = DeleteObject(oldBitmap);
+        assert(result);
 
         RECT newSize = { 0, 0, static_cast<LONG>(width), static_cast<LONG>(height) };
-        InvalidateRect(handle, &newSize, FALSE);
+        result = InvalidateRect(handle, &newSize, FALSE);
+        assert(result);
     }
 
 private:
@@ -60,10 +68,12 @@ private:
 class ExampleApp : public PBApp {
 public:
     ExampleApp() {
-        auto myWindow = createWindow<MyWindow>();
-
+        myWindow = createWindow<MyWindow>();
         myWindow->show();
     }
+
+private:
+    std::unique_ptr<Window> myWindow;
 };
 
 PBApp* createApp() {
