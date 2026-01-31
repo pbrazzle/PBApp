@@ -15,12 +15,19 @@ public:
 
     void show() const;
 
-    virtual void onPaint() {};
+    void paint();
 
-    virtual void onResize(unsigned int width, unsigned int height) {};
+    void resize(unsigned int width, unsigned int height);
+
 
 protected:
     HWND handle;
+    HDC screenBuffer;
+    HBITMAP screenBufferBitmap;
+    
+    virtual void onPaint() {};
+    
+    virtual void onResize(unsigned int width, unsigned int height) {};
 };
 
 HWND createWindowHandle();
