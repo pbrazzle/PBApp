@@ -9,6 +9,7 @@
 const char CLASS_NAME[] = "PB Window";
 
 Window::Window(HWND h) : handle(h) {
+    // TODO: Assert for success
     screenBuffer = CreateCompatibleDC(GetDC(handle));
     screenBufferBitmap = CreateCompatibleBitmap(screenBuffer, 1, 1);
     SelectObject(screenBuffer, screenBufferBitmap);
@@ -22,11 +23,13 @@ Window::Window(HWND h) : handle(h) {
 }
 
 void Window::show() const {
+    // TODO: Assert for success
     ShowWindow(handle, SW_SHOW);
     UpdateWindow(handle);
 }
 
 void Window::paint() {
+    // TODO: Assert for success
     PAINTSTRUCT ps;
     HDC hdc = BeginPaint(handle, &ps);
 

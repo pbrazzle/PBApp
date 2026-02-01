@@ -15,6 +15,8 @@ public:
 protected:
     void onPaint() override {
         auto sizeText = std::string("Width: " + std::to_string(getWidth()) + " Height: " + std::to_string(getHeight()));
+
+        // TODO: Wrap in easier function
         TextOut(screenBuffer, 0, 0, sizeText.c_str(), sizeText.size());
     }
 };
