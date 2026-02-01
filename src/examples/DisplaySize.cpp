@@ -22,8 +22,7 @@ protected:
 class ExampleApp : public PBApp {
 public:
     ExampleApp() {
-        auto myWindow = createWindow<MyWindow>();
-        myWindow->show();
+        createWindow<MyWindow>();
     }
 };
 

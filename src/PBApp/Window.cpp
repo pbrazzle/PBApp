@@ -17,6 +17,8 @@ Window::Window(HWND h) : handle(h) {
     GetClientRect(handle, &size);
     width = size.right;
     height = size.bottom;
+
+    show();
 }
 
 void Window::show() const {
