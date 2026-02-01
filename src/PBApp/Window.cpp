@@ -1,6 +1,7 @@
 #include "PBApp/Window.h"
 
 #include "PBApp/PBAssert.h"
+#include "PBApp/Button.h"
 
 #include <winuser.h>
 #include <set>
@@ -75,6 +76,14 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             UINT width = LOWORD(lParam);
             UINT height = HIWORD(lParam);
             window->resize(width, height);
+        }
+        return 0;
+        case WM_COMMAND:
+        {
+            if (HIWORD(wParam) == BN_CLICKED) {
+                Button* button = reinterpret_cast<Button*>(GetWindowLongPtr(reinterpret_cast<HWND>(lParam), GWLP_USERDATA));
+                button->onClick();
+            }
         }
         return 0;
         case WM_DESTROY:

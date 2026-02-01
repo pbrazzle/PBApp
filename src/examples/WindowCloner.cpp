@@ -9,10 +9,38 @@
 
 #include "PBApp/PBApp.h"
 #include "PBApp/Window.h"
+#include "PBApp/Button.h"
+#include <winuser.h>
+
+class CloningWindow;
+
+class CloningButton : public Button {
+public:
+    CloningButton(HWND handle) : Button(handle) { }
+
+    void onClick() override {
+        auto clonedWindow = createWindow<CloningWindow>();
+        clonedWindow->show();
+    }
+};
 
 class CloningWindow : public Window {
 public:
-    CloningWindow(HWND handle) : Window(handle) { }
+    CloningWindow(HWND handle) : Window(handle) {
+        HWND buttonHandle = CreateWindow("BUTTON", 
+            "CLONE", 
+            WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, 
+            0, 
+            0, 
+            100,
+            100, 
+            handle, 
+            NULL, 
+            GetModuleHandle(NULL), 
+            NULL);
+        
+        CloningButton* myButton = new CloningButton(buttonHandle);
+    }
 };
 
 class ExampleApp : public PBApp {
