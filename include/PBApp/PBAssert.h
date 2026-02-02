@@ -3,6 +3,13 @@
 #include <source_location>
 #include <string>
 #include <iostream>
+#include <stacktrace>
+
+inline void dumpStackTrace(unsigned int maxFrames = 64, decltype(std::stacktrace::current()) stack = std::stacktrace::current()) {
+    for (int i = 1; i < (stack.size() > maxFrames ? maxFrames : stack.size()); ++i) {
+        std::cerr << i - 1 << ") " << stack[i] << '\n';
+    }
+}
 
 inline void pb_assert(bool condition, const char* expr, std::string errorMessage, std::source_location source, const char* manualFunctionName = nullptr) {
     if (condition) return;
@@ -10,6 +17,9 @@ inline void pb_assert(bool condition, const char* expr, std::string errorMessage
     const char* functionName = (manualFunctionName) ? manualFunctionName : source.function_name();
 
     std::cerr << "PBApp assert [" << expr << "] failed in " << functionName << " (" << source.file_name() << ":" << source.line() << "): " << errorMessage << '\n';
+    
+    dumpStackTrace();
+
     std::abort();
 }
 

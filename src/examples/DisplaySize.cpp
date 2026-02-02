@@ -4,6 +4,7 @@
 
 #include "PBApp/PBApp.h"
 #include "PBApp/Window.h"
+#include "PBApp/PBAssert.h"
 
 #include <string>
 #include <wingdi.h>
@@ -29,5 +30,6 @@ public:
 };
 
 PBApp* createApp() {
+    PBAPP_ASSERT(false, "What that stack do?");
     return new ExampleApp;
 }
