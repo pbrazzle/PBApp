@@ -9,13 +9,19 @@
 const char CLASS_NAME[] = "PB Window";
 
 Window::Window(HWND h) : handle(h) {
-    // TODO: Assert for success
     screenBuffer = CreateCompatibleDC(GetDC(handle));
+    PBAPP_ASSERT(screenBuffer != NULL, "Failed to create bitmap DC");
+
     screenBufferBitmap = CreateCompatibleBitmap(screenBuffer, 1, 1);
-    SelectObject(screenBuffer, screenBufferBitmap);
+    PBAPP_ASSERT(screenBufferBitmap != NULL, "Failed to create buffer bitmap");
+
+    auto old = SelectObject(screenBuffer, screenBufferBitmap);
+    PBAPP_ASSERT(old != NULL, "Failed to switch to new buffer bitmap");
 
     RECT size;
-    GetClientRect(handle, &size);
+    auto result = GetClientRect(handle, &size);
+    PBAPP_ASSERT(result, "Failed to get window size");
+
     width = size.right;
     height = size.bottom;
 
@@ -23,23 +29,28 @@ Window::Window(HWND h) : handle(h) {
 }
 
 void Window::show() const {
-    // TODO: Assert for success
     ShowWindow(handle, SW_SHOW);
-    UpdateWindow(handle);
+
+    auto result = UpdateWindow(handle);
+    PBAPP_ASSERT(result, "Failed to schedule window redraw");
 }
 
 void Window::paint() {
-    // TODO: Assert for success
     PAINTSTRUCT ps;
     HDC hdc = BeginPaint(handle, &ps);
+    PBAPP_ASSERT(hdc != NULL, "Failed to get window DC");
 
     RECT windowSize = { 0, 0, static_cast<LONG>(width), static_cast<LONG>(height) };
-    FillRect(screenBuffer, &windowSize, reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1));
+    int bgResult = FillRect(screenBuffer, &windowSize, reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1));
+    PBAPP_ASSERT(bgResult, "Failed to clear window");
 
     onPaint();        
     
-    BitBlt(hdc, 0, 0, width, height, screenBuffer, 0, 0, SRCCOPY);
-    EndPaint(handle, &ps);
+    auto result = BitBlt(hdc, 0, 0, width, height, screenBuffer, 0, 0, SRCCOPY);
+    PBAPP_ASSERT(result, "Failed to draw buffer to screen");
+
+    result = EndPaint(handle, &ps);
+    PBAPP_ASSERT(result, "Failed to end paint");
 }
 
 void Window::resize(unsigned int width, unsigned int height) {

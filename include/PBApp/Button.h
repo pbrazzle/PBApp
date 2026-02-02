@@ -25,6 +25,9 @@ Button* createButton(HWND parent) {
             NULL, 
             GetModuleHandle(NULL), 
             NULL);
+
+    Button* button = new ButtonType(buttonHandle);
+    SetWindowLongPtr(buttonHandle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(button));
         
-    return new ButtonType(buttonHandle);
+    return button;
 }
