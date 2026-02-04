@@ -9,10 +9,13 @@
 const char CLASS_NAME[] = "PB Window";
 
 Window::Window(HWND h) : handle(h) {
-    screenBuffer = CreateCompatibleDC(GetDC(handle));
+    // TODO: Consider making factory functions for creating bitmap, getting size, etc.
+    // Would be nice to make this constructor noexcept
+    auto hdc = GetDC(handle);
+    screenBuffer = CreateCompatibleDC(hdc);
     PBAPP_ASSERT(screenBuffer != NULL, "Failed to create bitmap DC");
 
-    screenBufferBitmap = CreateCompatibleBitmap(screenBuffer, 1, 1);
+    screenBufferBitmap = CreateCompatibleBitmap(hdc, 100, 100);
     PBAPP_ASSERT(screenBufferBitmap != NULL, "Failed to create buffer bitmap");
 
     auto old = SelectObject(screenBuffer, screenBufferBitmap);
@@ -48,7 +51,9 @@ void Window::paint() {
 }
 
 void Window::resize(unsigned int width, unsigned int height) {
-    screenBufferBitmap = CreateCompatibleBitmap(screenBuffer, width, height);
+    // TODO: Helper functions for bitmap stuff
+    auto hdc = GetDC(handle);
+    screenBufferBitmap = CreateCompatibleBitmap(hdc, width, height);
     PBAPP_ASSERT(screenBufferBitmap, "Could not create new bitmap");
 
     auto oldBitmap = SelectObject(screenBuffer, screenBufferBitmap);
@@ -66,6 +71,18 @@ void Window::resize(unsigned int width, unsigned int height) {
     onResize(width, height);
 }
 
+void Window::mouseDown(unsigned int x, unsigned int y) {
+    onMouseDown(x, y);
+}
+
+void Window::mouseUp(unsigned int x, unsigned int y) {
+    onMouseUp(x, y);
+}
+
+void Window::mouseMove(unsigned int x, unsigned int y) {
+    onMouseMove(x, y);
+}
+
 unsigned int Window::getWidth() const { return width; }
 
 unsigned int Window::getHeight() const { return height; }
@@ -77,6 +94,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
     if (!window) return DefWindowProc(hwnd, uMsg, wParam, lParam);
 
+    // TODO - Route WM_MOUSEMOVE, WM_LBUTTONDOWN, WM_LBUTTONUP
     switch (uMsg) {
         case WM_PAINT:
             window->paint();
@@ -95,6 +113,15 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                 button->onClick();
             }
         }
+        return 0;
+        case WM_MOUSEMOVE:
+            window->mouseMove(LOWORD(lParam), HIWORD(lParam));
+        return 0;
+        case WM_LBUTTONDOWN:
+            window->mouseDown(LOWORD(lParam), HIWORD(lParam));
+        return 0;
+        case WM_LBUTTONUP:
+            window->mouseUp(LOWORD(lParam), HIWORD(lParam));
         return 0;
         case WM_DESTROY:
             destroyWindow(window);
@@ -149,6 +176,8 @@ namespace {
 void registerWindow(Window* window, HWND handle) {
     activeWindows.insert(window);
     SetWindowLongPtr(handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(window));
+
+    // show() must go after handle and Window* are linked to receive first paint() call
     window->show();
 }
 

@@ -5,6 +5,7 @@
 #include "PBApp/PBApp.h"
 #include "PBApp/Window.h"
 #include "PBApp/Button.h"
+#include "PBApp/PBAssert.h"
 
 class CloningWindow;
 
@@ -21,6 +22,14 @@ class CloningWindow : public Window {
 public:
     CloningWindow(HWND handle) : Window(handle) {
         createButton<CloningButton>(handle);
+    }
+
+protected:
+    void onPaint() override {
+        // TODO: Wrap in easier function
+        RECT windowSize = { 0, 0, static_cast<LONG>(getWidth()), static_cast<LONG>(getHeight()) };
+        int bgResult = FillRect(screenBuffer, &windowSize, reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1));
+        PBAPP_ASSERT(bgResult, "Failed to clear window");
     }
 };
 
