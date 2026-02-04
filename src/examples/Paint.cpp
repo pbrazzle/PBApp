@@ -24,7 +24,6 @@ protected:
         if (!drawing) return;
 
         auto result = SetPixel(screenBuffer, x, y, RGB(255, 0, 0));
-        auto color = GetPixel(screenBuffer, x, y);
         PBAPP_ASSERT(result != -1, "Failed to draw pixel");
 
         InvalidateRect(handle, NULL, FALSE);

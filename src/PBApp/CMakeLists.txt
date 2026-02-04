@@ -1,5 +1,6 @@
 set(SOURCES
     Button.cpp
+    Graphics.cpp
     PBApp.cpp
     Window.cpp)
 
