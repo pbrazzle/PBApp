@@ -24,8 +24,6 @@ Window::Window(HWND h) : handle(h) {
 
     width = size.right;
     height = size.bottom;
-
-    show();
 }
 
 void Window::show() const {
@@ -39,10 +37,6 @@ void Window::paint() {
     PAINTSTRUCT ps;
     HDC hdc = BeginPaint(handle, &ps);
     PBAPP_ASSERT(hdc != NULL, "Failed to get window DC");
-
-    RECT windowSize = { 0, 0, static_cast<LONG>(width), static_cast<LONG>(height) };
-    int bgResult = FillRect(screenBuffer, &windowSize, reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1));
-    PBAPP_ASSERT(bgResult, "Failed to clear window");
 
     onPaint();        
     
@@ -155,6 +149,7 @@ namespace {
 void registerWindow(Window* window, HWND handle) {
     activeWindows.insert(window);
     SetWindowLongPtr(handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(window));
+    window->show();
 }
 
 void destroyWindow(Window* window) {

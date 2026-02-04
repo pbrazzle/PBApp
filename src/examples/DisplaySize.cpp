@@ -15,8 +15,14 @@ public:
 
 protected:
     void onPaint() override {
-        auto sizeText = std::string("Width: " + std::to_string(getWidth()) + " Height: " + std::to_string(getHeight()));
+        // Clear background 
+        // TODO: Wrap in easier function
+        RECT windowSize = { 0, 0, static_cast<LONG>(width), static_cast<LONG>(height) };
+        int bgResult = FillRect(screenBuffer, &windowSize, reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1));
+        PBAPP_ASSERT(bgResult, "Failed to clear window");
 
+        auto sizeText = std::string("Width: " + std::to_string(getWidth()) + " Height: " + std::to_string(getHeight()));
+        // Draw text
         // TODO: Wrap in easier function
         TextOut(screenBuffer, 0, 0, sizeText.c_str(), sizeText.size());
     }
@@ -30,6 +36,5 @@ public:
 };
 
 PBApp* createApp() {
-    PBAPP_ASSERT(false, "What that stack do?");
     return new ExampleApp;
 }
