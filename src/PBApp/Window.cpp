@@ -33,7 +33,7 @@ void resizeBitmap(HWND windowHandle, HDC bitmapDC, unsigned int width, unsigned 
     DeleteObject(oldBitmap);
 }
 
-Window::Window(HWND h) : handle(h), width(100), height(100), buffer(handle, 100, 100) { }
+Window::Window(HWND h) : handle(h), width(100), height(100), buffer(handle, 100, 100), mouseOnScreen(false) { }
 
 void Window::show() {
     ShowWindow(handle, SW_SHOW);
@@ -78,7 +78,28 @@ void Window::mouseUp(unsigned int x, unsigned int y) {
 }
 
 void Window::mouseMove(unsigned int x, unsigned int y) {
+    if (!mouseOnScreen) {
+        mouseEnter();
+    }
     onMouseMove(x, y);
+}
+
+void Window::mouseLeave() { 
+    mouseOnScreen = false; 
+    onMouseLeave(); 
+}
+
+void Window::mouseEnter() {
+    // Request WM_MOUSELEAVE tracking
+    TRACKMOUSEEVENT leaveTracker;
+    leaveTracker.cbSize = sizeof(TRACKMOUSEEVENT);
+    leaveTracker.dwFlags = TME_LEAVE;
+    leaveTracker.hwndTrack = handle;
+    TrackMouseEvent(&leaveTracker);
+    
+    mouseOnScreen = true;
+
+    onMouseEnter();
 }
 
 unsigned int Window::getWidth() const noexcept { return width; }
@@ -119,6 +140,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
         return 0;
         case WM_LBUTTONUP:
             window->mouseUp(LOWORD(lParam), HIWORD(lParam));
+        return 0;
+        case WM_MOUSELEAVE:
+            window->mouseLeave();
         return 0;
         case WM_DESTROY:
             destroyWindow(window);

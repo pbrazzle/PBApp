@@ -1,8 +1,3 @@
-/**
-*   TODO: Handle mouse leaving screen
-*   TODO: Handle screen clearing when resizing
-*/
-
 #include "PBApp/PBApp.h"
 #include "PBApp/Window.h"
 #include "PBApp/PBAssert.h"
@@ -17,6 +12,10 @@ protected:
     }
 
     void onMouseUp(unsigned int x, unsigned int y) override {
+        drawing = false;
+    }
+
+    void onMouseLeave() override { 
         drawing = false;
     }
 

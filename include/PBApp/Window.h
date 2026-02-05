@@ -25,6 +25,10 @@ public:
 
     void mouseMove(unsigned int x, unsigned int y);
 
+    void mouseLeave();
+
+    void mouseEnter();
+
     unsigned int getWidth() const noexcept;
 
     unsigned int getHeight() const noexcept;
@@ -44,6 +48,13 @@ protected:
     virtual void onMouseUp(unsigned int x, unsigned int y) {};
 
     virtual void onMouseMove(unsigned int x, unsigned int y) {};
+
+    virtual void onMouseLeave() {};
+
+    virtual void onMouseEnter() {};
+
+private:
+    bool mouseOnScreen;
 };
 
 template <typename WindowType>
