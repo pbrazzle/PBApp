@@ -13,20 +13,5 @@ public:
 
 template <typename CheckboxType>
 Checkbox* createCheckbox(HWND parent) {
-    HWND checkboxHandle = CreateWindow("BUTTON", 
-            "CLONE", 
-            WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX, 
-            0, 
-            0, 
-            100,
-            100, 
-            parent, 
-            NULL, 
-            GetModuleHandle(NULL), 
-            NULL);
-
-    Checkbox* checkbox = new CheckboxType(checkboxHandle);
-    SetWindowLongPtr(checkboxHandle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(checkbox));
-        
-    return checkbox;
+    return createControl<Checkbox, CheckboxType>(parent, "BUTTON", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX);
 }
