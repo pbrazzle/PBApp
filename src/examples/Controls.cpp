@@ -6,6 +6,7 @@
 #include "PBApp/PBApp.h"
 #include "PBApp/Window.h"
 #include "PBApp/Button.h"
+#include "PBApp/Checkbox.h"
 #include "PBApp/Graphics.h"
 
 class ControlWindow : public Window {
@@ -16,7 +17,11 @@ public:
         button->setSize(100, 40);
         button->setText("A button");
         
-        // TODO: Checkbox
+        auto checkbox = createCheckbox<Checkbox>(handle);
+        checkbox->setPosition(100, 0);
+        checkbox->setSize(100, 40);
+        checkbox->setText("A checkbox");
+
         // TODO: Radio button
         // TODO: List box
         // TODO: Text field

@@ -1,6 +1,7 @@
 set(SOURCES
     Bitmap.cpp
     Button.cpp
+    Checkbox.cpp
     Control.cpp
     Graphics.cpp
     PBApp.cpp
