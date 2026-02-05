@@ -4,7 +4,6 @@
 
 #include "PBApp/PBApp.h"
 #include "PBApp/Window.h"
-#include "PBApp/PBAssert.h"
 #include "PBApp/Graphics.h"
 
 #include <string>

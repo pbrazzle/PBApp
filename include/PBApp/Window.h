@@ -4,14 +4,14 @@
 
 class Window {
 public:
-    Window(HWND h);
+    Window(HWND h) noexcept;
 
     Window& operator=(const Window&) = delete;
     Window(Window&) = delete;
 
-    virtual ~Window() {}
+    virtual ~Window();
 
-    void show() const;
+    void show();
 
     void paint();
 
@@ -23,9 +23,9 @@ public:
 
     void mouseMove(unsigned int x, unsigned int y);
 
-    unsigned int getWidth() const;
+    unsigned int getWidth() const noexcept;
 
-    unsigned int getHeight() const;
+    unsigned int getHeight() const noexcept;
 
 protected:
     HWND handle;

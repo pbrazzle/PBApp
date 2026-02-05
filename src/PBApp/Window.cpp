@@ -31,20 +31,16 @@ void resizeBitmap(HWND windowHandle, HDC bitmapDC, unsigned int width, unsigned 
     DeleteObject(oldBitmap);
 }
 
-Window::Window(HWND h) : handle(h) {
-    // TODO: Consider injecting the buffer bitmap and size
-    // Would be nice to make this constructor noexcept
-    RECT size;
-    auto result = GetClientRect(handle, &size);
-    PBAPP_ASSERT(result, "Failed to get window size");
+Window::Window(HWND h) noexcept : handle(h), screenBuffer(NULL), width(0), height(0) { }
 
-    width = size.right;
-    height = size.bottom;
-
-    screenBuffer = createBitmap(handle, width, height);
+Window::~Window() {
+    // TODO: Make Bitmap class, because this doesn't actually work
+    auto bufferBitmap = GetCurrentObject(screenBuffer, OBJ_BITMAP);
+    DeleteObject(bufferBitmap);
+    DeleteDC(screenBuffer);
 }
 
-void Window::show() const {
+void Window::show() {
     ShowWindow(handle, SW_SHOW);
 
     auto result = UpdateWindow(handle);
@@ -66,10 +62,15 @@ void Window::paint() {
 }
 
 void Window::resize(unsigned int width, unsigned int height) {
-    resizeBitmap(handle, screenBuffer, width, height);
-
     this->width = width;
     this->height = height;
+    
+    if (screenBuffer) {  
+        resizeBitmap(handle, screenBuffer, width, height);
+    } else { 
+        screenBuffer = createBitmap(handle, width, height);
+    }
+
     RECT newSize = { 0, 0, static_cast<LONG>(width), static_cast<LONG>(height) };
     auto result = InvalidateRect(handle, &newSize, FALSE);
     PBAPP_ASSERT(result, "Could not schedule repaint");
@@ -89,9 +90,9 @@ void Window::mouseMove(unsigned int x, unsigned int y) {
     onMouseMove(x, y);
 }
 
-unsigned int Window::getWidth() const { return width; }
+unsigned int Window::getWidth() const noexcept { return width; }
 
-unsigned int Window::getHeight() const { return height; }
+unsigned int Window::getHeight() const noexcept { return height; }
 
 void destroyWindow(Window* window);
 
