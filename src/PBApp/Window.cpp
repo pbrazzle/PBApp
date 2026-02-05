@@ -9,8 +9,6 @@
 
 const char CLASS_NAME[] = "PB Window";
 
-
-
 HDC createBitmap(HWND windowHandle, unsigned int width, unsigned int height) {
     auto hdc = GetDC(windowHandle);
     HDC bitmapDC = CreateCompatibleDC(hdc);

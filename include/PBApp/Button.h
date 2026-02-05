@@ -1,12 +1,19 @@
 #pragma once
 
 #include <windows.h>
+#include <string>
 
 class Button {
 public:
     Button(HWND handle);
 
-    virtual void onClick() = 0;
+    virtual void onClick() { }
+
+    void setPosition(unsigned int x, unsigned int y);
+
+    void setSize(unsigned int width, unsigned int height);
+
+    void setText(const std::string& text);
 
 private:
     HWND handle;
