@@ -10,7 +10,6 @@
 const char CLASS_NAME[] = "PB Window";
 
 HDC createBitmap(HWND windowHandle, unsigned int width, unsigned int height) {
-    std::cout << "Creating " << width << "x" << height << " bitmap\n";
     auto hdc = GetDC(windowHandle);
     HDC bitmapDC = CreateCompatibleDC(hdc);
     PBAPP_ASSERT(bitmapDC != NULL, "Failed to create bitmap DC");
@@ -21,15 +20,11 @@ HDC createBitmap(HWND windowHandle, unsigned int width, unsigned int height) {
     auto old = SelectObject(bitmapDC, bitmap);
     PBAPP_ASSERT(old != NULL, "Failed to switch to new buffer bitmap");
 
-    std::cout << "Made bitmap buffer dc " << bitmapDC << '\n';
-
     return bitmapDC;
 }
 
 void resizeBitmap(HWND windowHandle, HDC bitmapDC, unsigned int width, unsigned int height) {
     auto windowDC = GetDC(windowHandle);
-    std::cout << "Creating " << width << "x" << height << " bitmap\n";
-    std::cout << "DC is " << bitmapDC << '\n';
     auto newBitmap = CreateCompatibleBitmap(windowDC, width, height);
 
     auto oldBitmap = SelectObject(bitmapDC, newBitmap);

@@ -11,6 +11,5 @@ void clearScreen(HDC dc, unsigned int screenWidth, unsigned int screenHeight) {
 }
 
 void drawText(HDC dc, unsigned int x, unsigned int y, const std::string& text) {
-    std::cout << "Drawing text on DC " << dc << '\n'; 
     TextOut(dc, x, y, text.c_str(), text.size());
 }
