@@ -30,7 +30,6 @@ public:
 protected:
     HWND handle;
     HDC screenBuffer;
-    HBITMAP screenBufferBitmap;
 
     unsigned int width, height;
     

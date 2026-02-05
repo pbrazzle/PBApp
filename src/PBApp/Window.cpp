@@ -3,30 +3,50 @@
 #include "PBApp/PBAssert.h"
 #include "PBApp/Button.h"
 
+#include <wingdi.h>
 #include <winuser.h>
 #include <set>
 
 const char CLASS_NAME[] = "PB Window";
 
-Window::Window(HWND h) : handle(h) {
-    // TODO: Consider making factory functions for creating bitmap, getting size, etc.
-    // Would be nice to make this constructor noexcept
-    auto hdc = GetDC(handle);
-    screenBuffer = CreateCompatibleDC(hdc);
-    PBAPP_ASSERT(screenBuffer != NULL, "Failed to create bitmap DC");
+HDC createBitmap(HWND windowHandle, unsigned int width, unsigned int height) {
+    std::cout << "Creating " << width << "x" << height << " bitmap\n";
+    auto hdc = GetDC(windowHandle);
+    HDC bitmapDC = CreateCompatibleDC(hdc);
+    PBAPP_ASSERT(bitmapDC != NULL, "Failed to create bitmap DC");
 
-    screenBufferBitmap = CreateCompatibleBitmap(hdc, 100, 100);
-    PBAPP_ASSERT(screenBufferBitmap != NULL, "Failed to create buffer bitmap");
+    auto bitmap = CreateCompatibleBitmap(hdc, width, height);
+    PBAPP_ASSERT(bitmap != NULL, "Failed to create buffer bitmap");
 
-    auto old = SelectObject(screenBuffer, screenBufferBitmap);
+    auto old = SelectObject(bitmapDC, bitmap);
     PBAPP_ASSERT(old != NULL, "Failed to switch to new buffer bitmap");
 
+    std::cout << "Made bitmap buffer dc " << bitmapDC << '\n';
+
+    return bitmapDC;
+}
+
+void resizeBitmap(HWND windowHandle, HDC bitmapDC, unsigned int width, unsigned int height) {
+    auto windowDC = GetDC(windowHandle);
+    std::cout << "Creating " << width << "x" << height << " bitmap\n";
+    std::cout << "DC is " << bitmapDC << '\n';
+    auto newBitmap = CreateCompatibleBitmap(windowDC, width, height);
+
+    auto oldBitmap = SelectObject(bitmapDC, newBitmap);
+    DeleteObject(oldBitmap);
+}
+
+Window::Window(HWND h) : handle(h) {
+    // TODO: Consider injecting the buffer bitmap and size
+    // Would be nice to make this constructor noexcept
     RECT size;
     auto result = GetClientRect(handle, &size);
     PBAPP_ASSERT(result, "Failed to get window size");
 
     width = size.right;
     height = size.bottom;
+
+    screenBuffer = createBitmap(handle, width, height);
 }
 
 void Window::show() const {
@@ -51,21 +71,12 @@ void Window::paint() {
 }
 
 void Window::resize(unsigned int width, unsigned int height) {
-    // TODO: Helper functions for bitmap stuff
-    auto hdc = GetDC(handle);
-    screenBufferBitmap = CreateCompatibleBitmap(hdc, width, height);
-    PBAPP_ASSERT(screenBufferBitmap, "Could not create new bitmap");
-
-    auto oldBitmap = SelectObject(screenBuffer, screenBufferBitmap);
-    PBAPP_ASSERT(oldBitmap, "Could not select new bitmap");
-
-    auto result = DeleteObject(oldBitmap);
-    PBAPP_ASSERT(result, "Could not delete old bitmap");
+    resizeBitmap(handle, screenBuffer, width, height);
 
     this->width = width;
     this->height = height;
     RECT newSize = { 0, 0, static_cast<LONG>(width), static_cast<LONG>(height) };
-    result = InvalidateRect(handle, &newSize, FALSE);
+    auto result = InvalidateRect(handle, &newSize, FALSE);
     PBAPP_ASSERT(result, "Could not schedule repaint");
 
     onResize(width, height);
@@ -94,7 +105,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
     if (!window) return DefWindowProc(hwnd, uMsg, wParam, lParam);
 
-    // TODO - Route WM_MOUSEMOVE, WM_LBUTTONDOWN, WM_LBUTTONUP
     switch (uMsg) {
         case WM_PAINT:
             window->paint();

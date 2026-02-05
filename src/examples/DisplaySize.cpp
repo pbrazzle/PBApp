@@ -19,7 +19,7 @@ protected:
         clearScreen(screenBuffer, getWidth(), getHeight());
 
         auto sizeText = std::string("Width: " + std::to_string(getWidth()) + " Height: " + std::to_string(getHeight()));
-        drawText(screenBuffer, getWidth(), getHeight(), sizeText);
+        drawText(screenBuffer, 0, 0, sizeText);
     }
 };
 
