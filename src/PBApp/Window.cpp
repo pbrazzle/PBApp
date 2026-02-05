@@ -1,7 +1,7 @@
 #include "PBApp/Window.h"
 
 #include "PBApp/PBAssert.h"
-#include "PBApp/Button.h"
+#include "PBApp/Controls/Button.h"
 
 #include <wingdi.h>
 #include <winuser.h>

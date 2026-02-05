@@ -1,6 +1,6 @@
 #pragma once
 
-#include <PBApp/Control.h>
+#include <PBApp/Controls/Control.h>
 
 #include <windows.h>
 

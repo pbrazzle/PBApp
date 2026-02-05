@@ -5,8 +5,8 @@
 
 #include "PBApp/PBApp.h"
 #include "PBApp/Window.h"
-#include "PBApp/Button.h"
-#include "PBApp/Checkbox.h"
+#include "PBApp/Controls/Button.h"
+#include "PBApp/Controls/Checkbox.h"
 #include "PBApp/Graphics.h"
 
 class ControlWindow : public Window {
