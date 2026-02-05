@@ -13,6 +13,8 @@ public:
 
     void setText(const std::string& text);
 
+    LRESULT sendMessage(UINT msg, WPARAM wParam = 0, LPARAM lParam = 0);
+
 private:
     HWND handle;
 };

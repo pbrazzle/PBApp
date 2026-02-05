@@ -18,3 +18,7 @@ void Control::setText(const std::string& text) {
     auto result = SetWindowText(handle, text.c_str());
     PBAPP_ASSERT(result, "Failed to set window text");
 }
+
+LRESULT Control::sendMessage(UINT msg, WPARAM wParam, LPARAM lParam) {
+    return SendMessage(handle, msg, wParam, lParam);
+}
