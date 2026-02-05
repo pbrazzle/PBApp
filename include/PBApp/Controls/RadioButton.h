@@ -13,5 +13,5 @@ public:
 
 template <typename RadioButtonType>
 RadioButton* createRadioButton(HWND parent) {
-    return createControl<RadioButton, RadioButtonType>(parent, "BUTTON", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_RADIOBUTTON);
+    return createControl<RadioButton, RadioButtonType>(parent, "BUTTON", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_AUTORADIOBUTTON);
 }

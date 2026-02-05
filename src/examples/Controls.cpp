@@ -1,9 +1,3 @@
-/**
-*   TODO:
-*   - Add things to the listbox
-*   - Radio button actually works
-*/
-
 #include "PBApp/PBApp.h"
 #include "PBApp/Window.h"
 #include "PBApp/Graphics.h"
@@ -30,6 +24,8 @@ public:
         auto listbox = createListbox<Listbox>(handle);
         listbox->setPosition(200, 0);
         listbox->setSize(100, 40);
+        listbox->sendMessage(LB_ADDSTRING, 0, reinterpret_cast<LPARAM>("A thing"));
+        listbox->sendMessage(LB_ADDSTRING, 0, reinterpret_cast<LPARAM>("Thing 2"));
 
         auto textField = createTextField<TextField>(handle);
         textField->setPosition(0, 40);
@@ -40,6 +36,11 @@ public:
         radioButton->setPosition(100,40);
         radioButton->setSize(100, 20);
         radioButton->setText("Option 1");
+
+        auto radioButton2 = createRadioButton<RadioButton>(handle);
+        radioButton2->setPosition(100,60);
+        radioButton2->setSize(100, 20);
+        radioButton2->setText("Option 2");
     }
 
 protected:
