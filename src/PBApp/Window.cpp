@@ -9,6 +9,8 @@
 
 const char CLASS_NAME[] = "PB Window";
 
+
+
 HDC createBitmap(HWND windowHandle, unsigned int width, unsigned int height) {
     auto hdc = GetDC(windowHandle);
     HDC bitmapDC = CreateCompatibleDC(hdc);
@@ -31,14 +33,7 @@ void resizeBitmap(HWND windowHandle, HDC bitmapDC, unsigned int width, unsigned 
     DeleteObject(oldBitmap);
 }
 
-Window::Window(HWND h) noexcept : handle(h), screenBuffer(NULL), width(0), height(0) { }
-
-Window::~Window() {
-    // TODO: Make Bitmap class, because this doesn't actually work
-    auto bufferBitmap = GetCurrentObject(screenBuffer, OBJ_BITMAP);
-    DeleteObject(bufferBitmap);
-    DeleteDC(screenBuffer);
-}
+Window::Window(HWND h) : handle(h), width(100), height(100), buffer(handle, 100, 100) { }
 
 void Window::show() {
     ShowWindow(handle, SW_SHOW);
@@ -54,7 +49,7 @@ void Window::paint() {
 
     onPaint();        
     
-    auto result = BitBlt(hdc, 0, 0, width, height, screenBuffer, 0, 0, SRCCOPY);
+    auto result = BitBlt(hdc, 0, 0, width, height, buffer.getDC(), 0, 0, SRCCOPY);
     PBAPP_ASSERT(result, "Failed to draw buffer to screen");
 
     result = EndPaint(handle, &ps);
@@ -65,11 +60,7 @@ void Window::resize(unsigned int width, unsigned int height) {
     this->width = width;
     this->height = height;
     
-    if (screenBuffer) {  
-        resizeBitmap(handle, screenBuffer, width, height);
-    } else { 
-        screenBuffer = createBitmap(handle, width, height);
-    }
+    buffer.resize(handle, width, height);
 
     RECT newSize = { 0, 0, static_cast<LONG>(width), static_cast<LONG>(height) };
     auto result = InvalidateRect(handle, &newSize, FALSE);

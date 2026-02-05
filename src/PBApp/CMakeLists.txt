@@ -1,4 +1,5 @@
 set(SOURCES
+    Bitmap.cpp
     Button.cpp
     Graphics.cpp
     PBApp.cpp

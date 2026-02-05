@@ -1,15 +1,17 @@
 #pragma once
 
+#include <PBApp/Bitmap.h>
+
 #include <windows.h>
 
 class Window {
 public:
-    Window(HWND h) noexcept;
+    Window(HWND h);
 
     Window& operator=(const Window&) = delete;
     Window(Window&) = delete;
 
-    virtual ~Window();
+    virtual ~Window() {}
 
     void show();
 
@@ -29,7 +31,7 @@ public:
 
 protected:
     HWND handle;
-    HDC screenBuffer;
+    Bitmap buffer;
 
     unsigned int width, height;
     

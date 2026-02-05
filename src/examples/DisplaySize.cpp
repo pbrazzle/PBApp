@@ -15,10 +15,10 @@ public:
 
 protected:
     void onPaint() override {
-        clearScreen(screenBuffer, getWidth(), getHeight());
+        clearScreen(buffer.getDC(), getWidth(), getHeight());
 
         auto sizeText = std::string("Width: " + std::to_string(getWidth()) + " Height: " + std::to_string(getHeight()));
-        drawText(screenBuffer, 0, 0, sizeText);
+        drawText(buffer.getDC(), 0, 0, sizeText);
     }
 };
 

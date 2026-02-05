@@ -23,7 +23,7 @@ protected:
     void onMouseMove(unsigned int x, unsigned int y) override {
         if (!drawing) return;
 
-        auto result = SetPixel(screenBuffer, x, y, RGB(255, 0, 0));
+        auto result = SetPixel(buffer.getDC(), x, y, RGB(255, 0, 0));
         PBAPP_ASSERT(result != -1, "Failed to draw pixel");
 
         InvalidateRect(handle, NULL, FALSE);

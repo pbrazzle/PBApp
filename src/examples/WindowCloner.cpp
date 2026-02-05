@@ -26,7 +26,7 @@ public:
 
 protected:
     void onPaint() override {
-        clearScreen(screenBuffer, getWidth(), getHeight());
+        clearScreen(buffer.getDC(), getWidth(), getHeight());
     }
 };
 
