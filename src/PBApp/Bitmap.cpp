@@ -2,6 +2,11 @@
 
 #include <PBApp/PBAssert.h>
 
+// windows.h min macro
+#undef min
+
+#include <algorithm>
+
 Bitmap::Bitmap(HWND windowHandle, unsigned int width, unsigned int height) { 
     auto windowDC = GetDC(windowHandle);
     hdc = CreateCompatibleDC(windowDC);
@@ -24,8 +29,18 @@ void Bitmap::resize(HWND windowHandle, unsigned int width, unsigned int height) 
     auto windowDC = GetDC(windowHandle);
     auto newBitmap = CreateCompatibleBitmap(windowDC, width, height);
 
+    auto oldDC = CreateCompatibleDC(NULL);
     auto oldBitmap = SelectObject(hdc, newBitmap);
+    auto nullBitmap = SelectObject(oldDC, oldBitmap);
+
+    unsigned int copyWidth = std::min(this->width, width);
+    unsigned int copyHeight = std::min(this->height, height);
+
+    auto result = BitBlt(hdc, 0, 0, copyWidth, copyHeight, oldDC, 0, 0, SRCCOPY);
+
+    SelectObject(oldDC, nullBitmap);
     DeleteObject(oldBitmap);
+    DeleteDC(oldDC);
 }
 
 HDC Bitmap::getDC() const noexcept { return hdc; }

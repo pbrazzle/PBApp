@@ -18,4 +18,6 @@ public:
 private:
     HDC hdc;
     HGDIOBJ old;
+    unsigned int width;
+    unsigned int height;
 };
