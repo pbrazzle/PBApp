@@ -1,22 +1,14 @@
 #pragma once
 
-#include <windows.h>
-#include <string>
+#include <PBApp/Control.h>
 
-class Button {
+#include <windows.h>
+
+class Button : public Control {
 public:
     Button(HWND handle);
 
     virtual void onClick() { }
-
-    void setPosition(unsigned int x, unsigned int y);
-
-    void setSize(unsigned int width, unsigned int height);
-
-    void setText(const std::string& text);
-
-private:
-    HWND handle;
 };
 
 template <typename ButtonType>
