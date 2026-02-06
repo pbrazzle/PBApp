@@ -2,24 +2,33 @@
 #include "PBApp/Window.h"
 #include "PBApp/Graphics.h"
 
-#include "PBApp/Controls/Panel.h"
-
-#include <iostream>
+#include "PBApp/Controls/Button.h"
 
 class LayoutWindow : public Window {
 public:
     LayoutWindow(HWND handle) : Window(handle) {
-        auto panel = createPanel<Panel>(handle);
-        std::cout << "Made panel\n";
-        panel->setPosition(10, 10);
-        panel->setSize(100, 100);
-        std::cout << "Positioned and sized panel\n";
+        button1 = createButton<Button>(handle);
+        button1->setPosition(0, 0);
+
+        button2 = createButton<Button>(handle);
+    }
+
+    void onResize(unsigned int width, unsigned int height) override {
+        auto b1Width = width / 2;
+
+        button1->setSize(b1Width, height);
+        button2->setPosition(b1Width, 0);
+        button2->setSize(width - b1Width, height);
     }
 
 protected:
     void onPaint() override {
         clearScreen(buffer.getDC(), getWidth(), getHeight());
     }
+
+private:
+    Button* button1;
+    Button* button2;
 };
 
 class ExampleApp : public PBApp {

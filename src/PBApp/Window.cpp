@@ -169,10 +169,10 @@ HWND createWindowHandle() {
     registerWindowClass();
 
     HWND handle = CreateWindowEx(
-        0,                              // Optional window styles.
-        CLASS_NAME,                     // Window class
-        "Learn to Program Windows",     // Window text
-        WS_OVERLAPPEDWINDOW,            // Window style
+        0,                                      // Optional window styles.
+        CLASS_NAME,                             // Window class
+        "",                                     // Window text
+        WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,  // Window style
 
         // Size and position
         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
