@@ -42,11 +42,6 @@ public:
         radioButton2->setSize(100, 20);
         radioButton2->setText("Option 2");
     }
-
-protected:
-    void onPaint() override {
-        clearScreen(buffer.getDC(), getWidth(), getHeight());
-    }
 };
 
 class ExampleApp : public PBApp {

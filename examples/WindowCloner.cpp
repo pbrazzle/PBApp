@@ -5,7 +5,6 @@
 #include "PBApp/PBApp.h"
 #include "PBApp/Window.h"
 #include "PBApp/Controls/Button.h"
-#include "PBApp/Graphics.h"
 
 class CloningWindow;
 
@@ -21,12 +20,10 @@ public:
 class CloningWindow : public Window {
 public:
     CloningWindow(HWND handle) : Window(handle) {
-        createButton<CloningButton>(handle);
-    }
-
-protected:
-    void onPaint() override {
-        clearScreen(buffer.getDC(), getWidth(), getHeight());
+        auto button = createButton<CloningButton>(handle);
+        button->setSize(100, 40);
+        button->setPosition(0, 0);
+        button->setText("Clone");
     }
 };
 

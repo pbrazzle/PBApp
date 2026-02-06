@@ -2,6 +2,7 @@
 
 #include "PBApp/PBAssert.h"
 #include "PBApp/Controls/Button.h"
+#include "PBApp/Graphics.h"
 
 #include <wingdi.h>
 #include <winuser.h>
@@ -103,6 +104,10 @@ void Window::mouseEnter() {
 unsigned int Window::getWidth() const noexcept { return width; }
 
 unsigned int Window::getHeight() const noexcept { return height; }
+
+void Window::onPaint() {
+    clearScreen(buffer.getDC(), width, height);
+}
 
 void destroyWindow(Window* window);
 

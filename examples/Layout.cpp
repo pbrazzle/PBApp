@@ -20,11 +20,6 @@ public:
         equallySized.update(width, height);
     }
 
-protected:
-    void onPaint() override {
-        clearScreen(buffer.getDC(), getWidth(), getHeight());
-    }
-
 private:
     Button* button1;
     Button* button2;

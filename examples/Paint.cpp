@@ -28,6 +28,10 @@ protected:
         InvalidateRect(handle, NULL, FALSE);
     }
 
+    void onPaint() override {
+
+    }
+
 private:
     bool drawing;
 };
