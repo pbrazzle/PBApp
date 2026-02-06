@@ -13,3 +13,7 @@ target_link_libraries(Paint PBApp user32 gdi32)
 add_executable(Controls Controls.cpp)
 target_include_directories(Controls PUBLIC ${CMAKE_SOURCE_DIR}/include)
 target_link_libraries(Controls PBApp user32 gdi32)
+
+add_executable(Layout Layout.cpp)
+target_include_directories(Layout PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(Layout PBApp user32 gdi32)

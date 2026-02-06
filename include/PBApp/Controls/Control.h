@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PBApp/PBAssert.h"
+
 #include <windows.h>
 #include <string>
 
@@ -32,6 +34,8 @@ ControlBase* createControl(HWND parent, const std::string& className, DWORD styl
             NULL, 
             GetModuleHandle(NULL), 
             NULL);
+
+    PBAPP_ASSERT(handle != NULL, "Could not create Control window");
 
     ControlBase* control = new ControlDerived(handle);
     SetWindowLongPtr(handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(control));
