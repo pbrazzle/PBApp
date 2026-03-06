@@ -1,6 +1,5 @@
 #include "PBApp/PBApp.h"
 #include "PBApp/Window.h"
-#include "PBApp/Graphics.h"
 
 #include "PBApp/Controls/Button.h"
 #include "PBApp/Layouts/EquallySpacedLayout.h"
@@ -13,11 +12,8 @@ public:
 
         equallySized.add(button1);
         equallySized.add(button2);
-    }
 
-    void onResize(unsigned int width, unsigned int height) override {
-        // TODO: User should not have to update Layout themselves
-        equallySized.update(width, height);
+        setLayout(handle, &equallySized);
     }
 
 private:

@@ -1,11 +1,12 @@
 #pragma once
 
+#include <PBApp/Layouts/Layout.h>
+
 #include <vector>
 
 class Button;
 
-// TODO: Rename to make type of Layout more clear
-class EquallySpacedLayout {
+class EquallySpacedLayout : public Layout {
 public:
     EquallySpacedLayout() = default;
 

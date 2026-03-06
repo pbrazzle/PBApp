@@ -4,6 +4,7 @@ set(SOURCES
     Controls/Checkbox.cpp
     Controls/Control.cpp
     Layouts/EquallySpacedLayout.cpp
+    Layouts/Layout.cpp
     Graphics.cpp
     PBApp.cpp
     Window.cpp)

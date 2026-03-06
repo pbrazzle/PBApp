@@ -3,6 +3,7 @@
 #include "PBApp/PBAssert.h"
 #include "PBApp/Controls/Button.h"
 #include "PBApp/Graphics.h"
+#include "PBApp/Layouts/Layout.h"
 
 #include <wingdi.h>
 #include <winuser.h>
@@ -125,6 +126,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             UINT width = LOWORD(lParam);
             UINT height = HIWORD(lParam);
             window->resize(width, height);
+            updateWindowLayout(hwnd, width, height);
         }
         return 0;
         case WM_COMMAND:
