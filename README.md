@@ -1,6 +1,6 @@
 # TODOs/Ideas
 
-- Layout system for automated resizing/positioning of controls
+- Layouts should be able to contain other Layouts as well as Controls
 
 # Apps
 

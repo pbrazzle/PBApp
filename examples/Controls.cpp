@@ -1,6 +1,5 @@
 #include "PBApp/PBApp.h"
 #include "PBApp/Window.h"
-#include "PBApp/Graphics.h"
 
 #include "PBApp/Controls/Button.h"
 #include "PBApp/Controls/Checkbox.h"
