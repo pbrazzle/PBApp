@@ -5,7 +5,7 @@
 #include "PBApp/Controls/Button.h"
 #include "PBApp/Controls/Checkbox.h"
 #include "PBApp/Controls/Listbox.h"
-#include "PBApp/Controls/TextField.h"
+#include "PBApp/Controls/TextBox.h"
 #include "PBApp/Controls/RadioButton.h"
 
 class ControlWindow : public Window {
@@ -27,10 +27,10 @@ public:
         listbox->sendMessage(LB_ADDSTRING, 0, reinterpret_cast<LPARAM>("A thing"));
         listbox->sendMessage(LB_ADDSTRING, 0, reinterpret_cast<LPARAM>("Thing 2"));
 
-        auto textField = createTextField<TextField>(handle);
+        auto textField = createTextField<TextBox>(handle);
         textField->setPosition(0, 40);
         textField->setSize(100, 20);
-        textField->setText("A text field");
+        textField->setText("A text box");
 
         auto radioButton = createRadioButton<RadioButton>(handle);
         radioButton->setPosition(100,40);
