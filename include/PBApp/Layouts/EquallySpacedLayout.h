@@ -5,9 +5,9 @@
 class Button;
 
 // TODO: Rename to make type of Layout more clear
-class Layout {
+class EquallySpacedLayout {
 public:
-    Layout() = default;
+    EquallySpacedLayout() = default;
 
     void add(Button* button);
 

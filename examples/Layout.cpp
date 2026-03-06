@@ -3,7 +3,7 @@
 #include "PBApp/Graphics.h"
 
 #include "PBApp/Controls/Button.h"
-#include "PBApp/Layouts/Layout.h"
+#include "PBApp/Layouts/EquallySpacedLayout.h"
 
 class LayoutWindow : public Window {
 public:
@@ -24,7 +24,7 @@ private:
     Button* button1;
     Button* button2;
 
-    Layout equallySized;
+    EquallySpacedLayout equallySized;
 };
 
 class ExampleApp : public PBApp {

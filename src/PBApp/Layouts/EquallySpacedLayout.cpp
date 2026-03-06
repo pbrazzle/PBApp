@@ -1,13 +1,13 @@
-#include <PBApp/Layouts/Layout.h>
+#include <PBApp/Layouts/EquallySpacedLayout.h>
 
 #include <PBApp/Controls/Button.h>
 
-void Layout::add(Button* button) {
+void EquallySpacedLayout::add(Button* button) {
     buttons.push_back(button);
 }
 
 // Equally spaced horizontally, use full height
-void Layout::update(unsigned int width, unsigned int height) {
+void EquallySpacedLayout::update(unsigned int width, unsigned int height) {
     auto baseWidth = width / buttons.size();
     auto extraWidth = width % buttons.size();
 
