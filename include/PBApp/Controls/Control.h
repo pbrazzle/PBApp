@@ -1,6 +1,5 @@
 #pragma once
 
-#include "PBApp/PBAssert.h"
 #include "PBApp/GUIElement.h"
 
 #include <windows.h>
@@ -23,23 +22,6 @@ private:
 };
 
 template <typename ControlBase, typename ControlDerived>
-ControlBase* createControl(HWND parent, const std::string& className, DWORD style) {
-    HWND handle = CreateWindow(className.c_str(), 
-            "", 
-            style, 
-            0, 
-            0, 
-            1,
-            1, 
-            parent, 
-            NULL, 
-            GetModuleHandle(NULL), 
-            NULL);
+ControlBase* createControl(HWND parent, const std::string& className, DWORD style);
 
-    PBAPP_ASSERT(handle != NULL, "Could not create Control window");
-
-    ControlBase* control = new ControlDerived(handle);
-    SetWindowLongPtr(handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(control));
-        
-    return control;
-}
+#include <PBApp/Controls/Control.tpp>
