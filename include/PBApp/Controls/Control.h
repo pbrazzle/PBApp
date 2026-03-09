@@ -1,11 +1,12 @@
 #pragma once
 
 #include "PBApp/PBAssert.h"
+#include "PBApp/GUIElement.h"
 
 #include <windows.h>
 #include <string>
 
-class Control {
+class Control : public GUIElement {
 public:
     Control(HWND handle);
 

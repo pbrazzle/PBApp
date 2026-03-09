@@ -6,6 +6,7 @@ set(SOURCES
     Layouts/EquallySpacedLayout.cpp
     Layouts/Layout.cpp
     Graphics.cpp
+    GUIElement.cpp
     PBApp.cpp
     Window.cpp)
 

@@ -1,10 +1,11 @@
 #pragma once
 
+#include <PBApp/GUIElement.h>
 #include <PBApp/Bitmap.h>
 
 #include <windows.h>
 
-class Window {
+class Window : public GUIElement {
 public:
     Window(HWND h);
 
