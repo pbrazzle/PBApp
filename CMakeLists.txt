@@ -12,4 +12,5 @@ add_subdirectory(src)
 
 if (${PROJECT_IS_TOP_LEVEL})
     add_subdirectory(examples)
+    add_subdirectory(tests)
 endif()
