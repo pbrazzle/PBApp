@@ -129,14 +129,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             updateWindowLayout(hwnd, width, height);
         }
         return 0;
-        case WM_COMMAND:
-        {
-            if (HIWORD(wParam) == BN_CLICKED) {
-                Button* button = reinterpret_cast<Button*>(GetWindowLongPtr(reinterpret_cast<HWND>(lParam), GWLP_USERDATA));
-                button->onClick();
-            }
-        }
-        return 0;
         case WM_MOUSEMOVE:
             window->mouseMove(LOWORD(lParam), HIWORD(lParam));
         return 0;

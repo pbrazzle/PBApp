@@ -1,6 +1,7 @@
 #include <PBApp/Controls/Control.h>
 
 #include <PBApp/PBAssert.h>
+#include <PBApp/Message.h>
 
 #include <commctrl.h>
 
@@ -26,7 +27,6 @@ LRESULT Control::sendMessage(UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 LRESULT CALLBACK ControlWndProc(HWND handle, UINT msg, WPARAM wParam, LPARAM lParam, UINT_PTR subclassID, DWORD_PTR extraData) {
-    std::cout << "Got message: " << msg << '\n';
     return DefSubclassProc(handle, msg, wParam, lParam);
 }
 
